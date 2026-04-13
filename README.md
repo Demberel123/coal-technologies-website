@@ -1,54 +1,59 @@
-# Coal Technologies LLC — Вэбсайт
+# Enhanced Vite React TypeScript Template
 
-Монголын нүүрсний уурхайнуудын нэгдсэн мэдээллийн платформ.
+This template includes built-in detection for missing CSS variables between your Tailwind config and CSS files.
 
-## Ажиллуулах заавар
+## Features
 
-### 1. Шаардлага
-- Node.js (v18+) суулгасан байх — https://nodejs.org
+- **CSS Variable Detection**: Automatically detects if CSS variables referenced in `tailwind.config.cjs` are defined in `src/index.css`
+- **Enhanced Linting**: Includes ESLint, Stylelint, and custom CSS variable validation
+- **Shadcn/ui**: Pre-configured with all Shadcn components
+- **Modern Stack**: Vite + React + TypeScript + Tailwind CSS
 
-### 2. Суулгах
+## Available Scripts
+
 ```bash
-npm install
+# Run all linting (includes CSS variable check)
+npm run lint
+
+# Check only CSS variables
+npm run check:css-vars
+
+# Individual linting
+npm run lint:js    # ESLint
+npm run lint:css   # Stylelint
 ```
 
-### 3. Хөгжүүлэлтийн горимоор ажиллуулах (localhost)
-```bash
-npm run dev
+## CSS Variable Detection
+
+The template includes a custom script that:
+
+1. **Parses `tailwind.config.cjs`** to find all `var(--variable)` references
+2. **Parses `src/index.css`** to find all defined CSS variables (`--variable:`)
+3. **Cross-references** them to find missing definitions
+4. **Reports undefined variables** with clear error messages
+
+### Example Output
+
+When CSS variables are missing:
 ```
-Дараа нь `http://localhost:5173` дээр нээнэ.
+❌ Undefined CSS variables found in tailwind.config.cjs:
+   --sidebar-background
+   --sidebar-foreground
+   --sidebar-primary
 
-### 4. Build хийх (production)
-```bash
-npm run build
+Add these variables to src/index.css
 ```
-`dist/` хавтас дотор бэлэн файлууд үүснэ.
 
----
+When all variables are defined:
+```
+✅ All CSS variables in tailwind.config.cjs are defined
+```
 
-## Вэбсайт байршуулах (Deploy)
+## How It Works
 
-### Арга 1: Vercel (Хамгийн хялбар, ҮНЭГҮЙ)
-1. https://vercel.com дээр GitHub-аар бүртгүүлэх
-2. Энэ фолдерыг GitHub repo болгон push хийх
-3. Vercel дээр "New Project" → GitHub repo-гоо сонгох
-4. Автоматаар deploy болно
-5. `coal-technologies.vercel.app` гэсэн домэйн авна
+The detection happens during the `npm run lint` command, which will:
+- Exit with error code 1 if undefined variables are found
+- Show exactly which variables need to be added to your CSS file
+- Integrate seamlessly with your development workflow
 
-### Арга 2: Netlify (ҮНЭГҮЙ)
-1. https://netlify.com дээр бүртгүүлэх
-2. `npm run build` гүйцэтгэх
-3. `dist/` фолдерыг Netlify руу чирэх (drag & drop)
-4. Бэлэн!
-
-### Арга 3: Өөрийн домэйн
-1. Vercel эсвэл Netlify дээр deploy хийсний дараа
-2. Settings → Domains → Өөрийн домэйн нэмэх
-3. DNS тохиргоо хийх (A record эсвэл CNAME)
-
----
-
-## Холбоо барих
-- **CEO:** Б. Дэмбэрэл — 86823646
-- **Engineer:** Б. Алтанхундага — 85443201
-- **Email:** coaltechnologiesllc@must.edu.mn
+This prevents runtime CSS issues where Tailwind classes reference undefined CSS variables.
